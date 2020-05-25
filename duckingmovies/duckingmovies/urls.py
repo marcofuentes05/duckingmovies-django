@@ -25,6 +25,11 @@ from genres.views import GenreViewSet
 from movies.views import MovieViewSet
 from series.views import SerieViewSet
 from usuarios.views import UserViewSet
+from comments.views import GameCommentViewSet, MovieCommentViewSet, SerieCommentViewSet
+from consoles.views import ConsoleViewSet
+from developers.views import DeveloperViewSet
+from movie_producers.views import MovieProducerViewSet
+from videogames.views import VideogameViewSet
 
 
 router = routers.DefaultRouter()
@@ -36,6 +41,14 @@ router.register(r'genres',GenreViewSet)
 router.register(r'movies', MovieViewSet)
 router.register(r'series', SerieViewSet)
 router.register(r'users', UserViewSet)
+router.register(r'game-comments', GameCommentViewSet)
+router.register(r'movie-comments', MovieCommentViewSet)
+router.register(r'serie-comments', SerieCommentViewSet)
+router.register(r'consoles', ConsoleViewSet)
+router.register(r'developers', DeveloperViewSet)
+router.register(r'movie-producers', MovieProducerViewSet)
+router.register(r'videogames', VideogameViewSet)
+
 
 
 urlpatterns = [

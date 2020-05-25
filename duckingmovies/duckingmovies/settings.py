@@ -46,7 +46,12 @@ INSTALLED_APPS = [
     'genres.apps.GenresConfig',
     'movies.apps.MoviesConfig',
     'series.apps.SeriesConfig',
-    'usuarios.apps.UsuariosConfig'
+    'usuarios.apps.UsuariosConfig',
+    'comments.apps.CommentsConfig',
+    'consoles.apps.ConsolesConfig',
+    'developers.apps.DevelopersConfig',
+    'movie_producers.apps.MovieProducersConfig',
+    'videogames.apps.VideogamesConfig',
 
 ]
 
