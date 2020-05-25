@@ -15,7 +15,31 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import url, include
+from rest_framework import routers
+
+from actors.views import ActorViewSet
+from awards.views import AwardViewSet
+from directors.views import DirectorViewSet
+from genres.views import GenreViewSet
+from movies.views import MovieViewSet
+from series.views import SerieViewSet
+from usuarios.views import UserViewSet
+
+
+router = routers.DefaultRouter()
+
+router.register(r'actors', ActorViewSet)
+router.register(r'awards', AwardViewSet)
+router.register(r'directors', DirectorViewSet)
+router.register(r'genres',GenreViewSet)
+router.register(r'movies', MovieViewSet)
+router.register(r'series', SerieViewSet)
+router.register(r'users', UserViewSet)
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls),
+    url(r'^api/v1/', include(router.urls))
+
 ]

@@ -1,5 +1,5 @@
 from django.db import models
-
+from awards.models import Award
 # Create your models here.
 class Director(models.Model):
     name = models.CharField(max_length=80,null = False)
@@ -7,9 +7,9 @@ class Director(models.Model):
     birthDate = models.DateField()
     birthPlace = models.CharField(max_length=80,null = False)
     netWorth = models.IntegerField()
-    height = models.DecimalField()
+    height = models.DecimalField(decimal_places = 2, max_digits = 3)
     nickname = models.CharField(max_length = 80, null = True)
-    awards = models.ManyToManyField('awards.award')
+    awards = models.ManyToManyField(Award)
 
     def __str__(self):
-        return 'Director: {}'.format(self.name)
+        return 'Director: {} {}'.format(self.name, self.lastName)
