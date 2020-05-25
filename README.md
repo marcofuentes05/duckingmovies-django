@@ -1,8 +1,8 @@
-# duckingmovies-django
+# Duckingmovies Django
 
-<h4>Proyecto final de la clase de sistemas y tecnologías web, 1er semestre de 2020</h4>
+<h4 align = 'center'>Proyecto final de la clase de sistemas y tecnologías web, 1er semestre de 2020</h4>
 
-<h4> Desarrollado por Andy Castillo y Marco Fuentes </h4>
+<h4 align = 'center'> Desarrollado por Andy Castillo y Marco Fuentes </h4>
 
 # MONTAR ENTORNO VIRTUAL
 
