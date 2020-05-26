@@ -10,6 +10,9 @@ from consoles.serializers import ConsoleSerializer
 
 class VideogameSerializer(serializers.ModelSerializer):
     genres = GenreSerializer
+    developer = DeveloperSerializer
+    comments = GameCommentSerializer
+    consoles = ConsoleSerializer
     class Meta:
         model = Videogame
         fields = (

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from directors.models import Director
-from awards.models import Award
+from awards.serializers import AwardSerializer
 
 class DirectorSerializer(serializers.ModelSerializer):
     class Meta: 

@@ -1,5 +1,9 @@
 from django.db import models
 from awards.models import Award
+from actors.serializers import ActorSerializer
+from directors.serializers import DirectorSerializer
+from awards.serializers import AwardSerializer
+
 # Create your models here.
 class Serie(models.Model):
     name = models.CharField(max_length=80, null=True)

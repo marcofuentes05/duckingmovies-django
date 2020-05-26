@@ -10,7 +10,7 @@ class MovieComment(models.Model):
     )
 
     def __str__(self):
-        return str(self)
+        return self.text
 
 class SerieComment(models.Model):
     text = models.CharField(max_length=500)
@@ -20,7 +20,7 @@ class SerieComment(models.Model):
     )
 
     def __str__(self):
-        return str(self)
+        return self.text
 
 class GameComment(models.Model):
     text = models.CharField(max_length=500)
@@ -30,4 +30,4 @@ class GameComment(models.Model):
     )
 
     def __str__(self):
-        return str(self)
+        return self.text

@@ -7,4 +7,4 @@ class MovieProducer(models.Model):
     year_founded = models.IntegerField()
 
     def __str__(self):
-        return str(self)
+        return self.name

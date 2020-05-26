@@ -21,4 +21,4 @@ class Videogame(models.Model):
     )
 
     def __str__(self):
-        return str(self)
+        return self.title
