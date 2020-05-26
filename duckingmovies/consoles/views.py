@@ -16,7 +16,7 @@ class ConsoleViewSet(viewsets.ModelViewSet):
             name='ConsolePermission',
             permission_configuration={
                 'base': {
-                    'create': True,
+                    'create': lambda user, requ: user.is_staff,
                     'list': True,
                 },
                 'instance': {

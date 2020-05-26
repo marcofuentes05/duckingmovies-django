@@ -16,13 +16,13 @@ class GameCommentViewSet(viewsets.ModelViewSet):
             name='GameCommentPermission',
             permission_configuration={
                 'base': {
-                    'create': True,
-                    'list': True,
+                    'create': lambda user, req: user.is_authenticated,
+                    'list': lambda user, req: user.is_authenticated,
                 },
                 'instance': {
-                    'retrieve': True,
-                    'update': True,
-                    'partial_update': True,
+                    'retrieve': False,
+                    'update': False,
+                    'partial_update': False,
                     'destroy': True,
                 }
             }
@@ -37,13 +37,13 @@ class MovieCommentViewSet(viewsets.ModelViewSet):
             name='MovieCommentPermission',
             permission_configuration={
                 'base': {
-                    'create': True,
-                    'list': True,
+                    'create': lambda user, req: user.is_authenticated,
+                    'list': lambda user, req: user.is_authenticated,
                 },
                 'instance': {
-                    'retrieve': True,
-                    'update': True,
-                    'partial_update': True,
+                    'retrieve': False,
+                    'update': False,
+                    'partial_update': False,
                     'destroy': True,
                 }
             }
@@ -58,13 +58,13 @@ class SerieCommentViewSet(viewsets.ModelViewSet):
             name='SerieCommentPermission',
             permission_configuration={
                 'base': {
-                    'create': True,
-                    'list': True,
+                    'create': lambda user, req: user.is_authenticated,
+                    'list': lambda user, req: user.is_authenticated,
                 },
                 'instance': {
-                    'retrieve': True,
-                    'update': True,
-                    'partial_update': True,
+                    'retrieve': False,
+                    'update': False,
+                    'partial_update': False,
                     'destroy': True,
                 }
             }

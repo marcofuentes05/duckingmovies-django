@@ -17,14 +17,14 @@ class AwardViewSet(viewsets.ModelViewSet):
             name='AwardPermission',
             permission_configuration={
                 'base': {
-                    'create': True,
-                    'list': True,
+                    'create': lambda user, req: user.is_staff,
+                    'list': lambda user, req: user.is_authenticated,
                 },
                 'instance': {
                     'retrieve': True,
-                    'update': True,
+                    'update': lambda user, req, third: user.is_staff,
                     'partial_update': True,
-                    'destroy': True,
+                    'destroy': lambda user, req, third: user.is_staff,
                 }
             }
         ),

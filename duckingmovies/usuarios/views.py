@@ -19,7 +19,8 @@ class UserViewSet(viewsets.ModelViewSet):
                 'base': {
                     'create': True,
                     'list': True,
-                    'newUser': True
+                    'newUser': True,
+                    'upgrade': lambda user, rec : user.is_staff
                 },
                 'instance': {
                     'retrieve': True,
@@ -46,4 +47,15 @@ class UserViewSet(viewsets.ModelViewSet):
         usuario.save()
         return Response({
             'status':'ok'
+        })
+
+    @action(detail = True, url_path = 'upgrade_user', methods = ['post'])
+    def upgrade(self, request, pk = None):
+        user = User.objects.get(id = pk)
+        print(str(user.username))
+        print(str(user.password))
+        user.is_staff = True
+        user.save()
+        return Response({
+            'Status': 'ok'
         })

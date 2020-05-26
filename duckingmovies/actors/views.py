@@ -23,9 +23,10 @@ class ActorViewSet(viewsets.ModelViewSet):
                 },
                 'instance': {
                     'retrieve': True,
-                    'update': True,
+                    'update': lambda user, req, third: user.is_authenticated,
                     'partial_update': True,
-                    'destroy': True,
+                    'destroy': lambda user, req, third: user.is_authenticated,
+                    'actorAwards': lambda user, req, third: user.is_authenticated,
                 }
             }
         ),

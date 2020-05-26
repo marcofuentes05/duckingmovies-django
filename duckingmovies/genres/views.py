@@ -17,14 +17,14 @@ class GenreViewSet(viewsets.ModelViewSet):
             name='GenrePermission',
             permission_configuration={
                 'base': {
-                    'create': True,
-                    'list': True,
+                    'create': lambda user, request: user.is_staff,
+                    'list': lambda user, request: user.is_authenticated,
                 },
                 'instance': {
                     'retrieve': True,
-                    'update': True,
+                    'update': lambda user, request, third: user.is_staff,
                     'partial_update': True,
-                    'destroy': True,
+                    'destroy': lambda user, request, third: user.is_staff,
                 }
             }
         ),

@@ -19,14 +19,17 @@ class MovieViewSet ( viewsets.ModelViewSet):
             name='MoviePermission',
             permission_configuration={
                 'base': {
-                    'create': True,
-                    'list': True,
+                    'create': lambda user, request, third: user.is_staff,
+                    'list': lambda user, request: user.is_authenticated,
                 },
                 'instance': {
                     'retrieve': True,
                     'update': True,
                     'partial_update': True,
                     'destroy': True,
+                    'movieDirector': lambda user, request, third: user.is_authenticated,
+                    'movieActors': lambda user, request, third: user.is_authenticated,
+                    'movieAwards': lambda user, request, third: user.is_authenticated,
                 }
             }
         ),

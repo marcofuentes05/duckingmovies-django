@@ -18,14 +18,17 @@ class SerieViewSet(viewsets.ModelViewSet):
             name='SeriePermission',
             permission_configuration={
                 'base': {
-                    'create': True,
-                    'list': True,
+                    'create': lambda user, request: user.is_staff,
+                    'list': lambda user, request: user.is_authenticated,
                 },
                 'instance': {
                     'retrieve': True,
-                    'update': True,
+                    'update': lambda user, request, third: user.is_staff,
                     'partial_update': True,
-                    'destroy': True,
+                    'destroy': lambda user, request, third: user.is_staff,
+                    'serieDirector': lambda user, request, third: user.is_authenticated,
+                    'serieActors': lambda user, request, third: user.is_authenticated,
+                    'serieAwards': lambda user, request, third: user.is_authenticated,
                 }
             }
         ),
@@ -40,7 +43,7 @@ class SerieViewSet(viewsets.ModelViewSet):
 
 
     @action(detail=True, url_path='actors', methods=['get'])
-    def serieDirector(self, request, pk=None):
+    def serieActors(self, request, pk=None):
         actors = self.get_object().actors.all()
         return Response(
             ActorSerializer(actor).data for actor in actors

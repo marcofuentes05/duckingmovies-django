@@ -154,7 +154,7 @@ REST_FRAMEWORK = {
 
 JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
-    'JWT_EXPIRATION_DELTA' : datetime.timedelta(seconds = 60)
+    'JWT_EXPIRATION_DELTA' : datetime.timedelta(days = 2)
 }
 
 AUTHENTICATION_BACKENDS = (
