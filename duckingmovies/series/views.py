@@ -4,6 +4,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from permissions.services import APIPermissionClassFactory
 
 from .models import Serie
 from .serializers import SerieSerializer
@@ -12,6 +13,23 @@ from awards.serializers import AwardSerializer
 class SerieViewSet(viewsets.ModelViewSet):
     queryset = Serie.objects.all()
     serializer_class = SerieSerializer
+    permission_classes = (
+        APIPermissionClassFactory(
+            name='SeriePermission',
+            permission_configuration={
+                'base': {
+                    'create': True,
+                    'list': True,
+                },
+                'instance': {
+                    'retrieve': True,
+                    'update': True,
+                    'partial_update': True,
+                    'destroy': True,
+                }
+            }
+        ),
+    )
 
     @action(detail=True, url_path='director', methods=['get'])
     def serieDirector(self, request, pk=None):

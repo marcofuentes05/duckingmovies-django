@@ -4,11 +4,27 @@ from rest_framework import viewsets
 
 from consoles.models import Console
 from consoles.serializers import ConsoleSerializer
-#TODO import permission
+from permissions.services import APIPermissionClassFactory
 
 # Create your views here.
 
 class ConsoleViewSet(viewsets.ModelViewSet):
     queryset = Console.objects.all()
     serializer_class = ConsoleSerializer
-    #TODO permission_classes
+    permission_classes = (
+        APIPermissionClassFactory(
+            name='ConsolePermission',
+            permission_configuration={
+                'base': {
+                    'create': True,
+                    'list': True,
+                },
+                'instance': {
+                    'retrieve': True,
+                    'update': True,
+                    'partial_update': True,
+                    'destroy': True,
+                }
+            }
+        ),
+    )

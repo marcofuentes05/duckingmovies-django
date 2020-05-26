@@ -11,16 +11,13 @@ class Videogame(models.Model):
     )
     genres = models.ManyToManyField(
         'genres.Genre',
-        on_delete = models.CASCADE,
     )
     comments = models.ManyToManyField(
         'comments.GameComment',
-        on_delete = models.CASCADE,
     )
-    rating = models.DecimalField(decimal_places=1)
+    rating = models.DecimalField(decimal_places=1, max_digits = 2)
     consoles = models.ManyToManyField(
         'consoles.Console',
-        on_delete = models.CASCADE,
     )
 
     def __str__(self):

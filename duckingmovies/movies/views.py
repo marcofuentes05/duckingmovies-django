@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
+from permissions.services import APIPermissionClassFactory
 
 from .models import Movie
 from .serializers import MovieSerializer
@@ -14,6 +14,23 @@ from awards.serializers import AwardSerializer
 class MovieViewSet ( viewsets.ModelViewSet):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
+    permission_classes = (
+        APIPermissionClassFactory(
+            name='MoviePermission',
+            permission_configuration={
+                'base': {
+                    'create': True,
+                    'list': True,
+                },
+                'instance': {
+                    'retrieve': True,
+                    'update': True,
+                    'partial_update': True,
+                    'destroy': True,
+                }
+            }
+        ),
+    )
 
     @action(detail = True, url_path = 'director', methods = ['get'])
     def movieDirector(self, request, pk = None):

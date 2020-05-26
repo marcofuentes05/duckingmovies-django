@@ -8,10 +8,9 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
-"""
-
+""" 
 import os
-
+import datetime
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -39,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'guardian',
 
     'actors.apps.ActorsConfig',
     'awards.apps.AwardsConfig',
@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'developers.apps.DevelopersConfig',
     'movie_producers.apps.MovieProducersConfig',
     'videogames.apps.VideogamesConfig',
+    'permissions.apps.PermissionsConfig',
 
 ]
 
@@ -138,3 +139,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication'
+    ),
+}
+
+JWT_AUTH = {
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_EXPIRATION_DELTA' : datetime.timedelta(seconds = 60)
+}
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend'
+)
+CORS_ORIGIN_ALLOW_ALL = True

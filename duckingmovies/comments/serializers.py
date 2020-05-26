@@ -3,9 +3,10 @@ from rest_framework import serializers
 from comments.models import GameComment, MovieComment, SerieComment
 #TODO import serializer user
 from django.contrib.auth.models import User
+from usuarios.serializers import UserSerializer
 
 class GameCommentSerializer(serializers.ModelSerializer):
-    author = #serializer user
+    author = UserSerializer
     class Meta:
         model = GameComment
         fields = (
@@ -14,7 +15,7 @@ class GameCommentSerializer(serializers.ModelSerializer):
         )
 
 class MovieCommentSerializer(serializers.ModelSerializer):
-    author = #serializer user
+    author = UserSerializer
     class Meta:
         model = MovieComment
         fields = (
@@ -23,7 +24,7 @@ class MovieCommentSerializer(serializers.ModelSerializer):
         )
 
 class SerieCommentSerializer(serializers.ModelSerializer):
-    author = #serializer user
+    author = UserSerializer
     class Meta:
         model = SerieComment
         fields = (
