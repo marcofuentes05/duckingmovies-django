@@ -18,8 +18,8 @@ class ActorViewSet(viewsets.ModelViewSet):
             name='ActorPermission',
             permission_configuration={
                 'base': {
-                    'create': True,
-                    'list': True,
+                    'create': lambda user, requ : user.is_staff,
+                    'list': lambda user, req: user.is_authenticated,
                 },
                 'instance': {
                     'retrieve': True,

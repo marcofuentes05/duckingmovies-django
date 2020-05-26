@@ -19,6 +19,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 'base': {
                     'create': True,
                     'list': True,
+                    'newUser': True
                 },
                 'instance': {
                     'retrieve': True,
@@ -29,3 +30,20 @@ class UserViewSet(viewsets.ModelViewSet):
             }
         ),
     )
+
+    @action(detail=False, url_path = 'create_user', methods = ['post'])
+    def newUser (self, request):
+        print(request.data)
+        print(request.data['username'])
+        usuario = User(
+            username=request.data['username'], 
+            first_name=request.data['firstName'],
+            last_name=request.data['lastName'],
+            email=request.data['email'], 
+            is_staff = False
+        )
+        usuario.set_password(request.data['password'])
+        usuario.save()
+        return Response({
+            'status':'ok'
+        })
