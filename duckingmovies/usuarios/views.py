@@ -8,6 +8,15 @@ from permissions.services import APIPermissionClassFactory
 
 from django.contrib.auth.models import User
 from .serializers import UserSerializer
+from movies.serializers import MovieSerializer
+from series.serializers import SerieSerializer
+from comments.models import MovieComment
+from videogames.serializers import VideogameSerializer
+
+from videogames.models import Videogame
+from series.models import Serie
+from movies.models import Movie
+from comments.serializers import MovieComment , SerieComment , GameComment
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -18,15 +27,19 @@ class UserViewSet(viewsets.ModelViewSet):
             permission_configuration={
                 'base': {
                     'create': True,
-                    'list': True,
+                    'list': lambda user , rec : user.is_staff,
                     'newUser': True,
-                    'upgrade': lambda user, rec : user.is_staff
+                    'upgrade': lambda user, rec : user.is_staff,
+                    'cmovies' : lambda user , rec: user.is_authenticated,
+                    'cseries': lambda user, rec: user.is_authenticated,
+                    'cgames': lambda user, rec: user.is_authenticated,
                 },
                 'instance': {
                     'retrieve': True,
                     'update': True,
                     'partial_update': True,
                     'destroy': True,
+
                 }
             }
         ),
@@ -59,3 +72,25 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response({
             'Status': 'ok'
         })
+
+    @action(detail = True , url_path = 'commented_movies' , methods = ['get'])
+    def cmovies( self , request , pk = None ):
+        movies = Movie.objects.filter(comments__author__id = pk)
+        print(str(movies))
+        return Response(
+            MovieSerializer(movie).data for movie in movies
+        )
+
+    @action(detail=True, url_path='commentedseries', methods=['get'])
+    def cseries(self, request, pk=None):
+        series = Serie.objects.filter(comments__author__id=pk)
+        return Response(
+            SerieSerializer(serie).data for serie in series
+        )
+
+    @action (detail = True , url_path = 'commentedgames' , methods = ['get'])
+    def cgames(self, request, pk = None):
+        games = Videogame.objects.filter(comments__author__id=pk)
+        return Response(
+            VideogameSerializer(game).data for game in games
+        )

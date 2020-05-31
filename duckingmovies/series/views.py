@@ -10,6 +10,7 @@ from .models import Serie
 from .serializers import SerieSerializer
 from actors.serializers import ActorSerializer
 from awards.serializers import AwardSerializer
+from directors.serializers import DirectorSerializer
 class SerieViewSet(viewsets.ModelViewSet):
     queryset = Serie.objects.all()
     serializer_class = SerieSerializer
@@ -29,6 +30,8 @@ class SerieViewSet(viewsets.ModelViewSet):
                     'serieDirector': lambda user, request, third: user.is_authenticated,
                     'serieActors': lambda user, request, third: user.is_authenticated,
                     'serieAwards': lambda user, request, third: user.is_authenticated,
+                    'getTrending' : True,
+                    'getTrendingall' : True
                 }
             }
         ),
@@ -37,9 +40,9 @@ class SerieViewSet(viewsets.ModelViewSet):
     @action(detail=True, url_path='director', methods=['get'])
     def serieDirector(self, request, pk=None):
         director = self.get_object().director
-        return Response({
-            str(director)
-        })
+        return Response(
+            DirectorSerializer(director).data
+        )
 
 
     @action(detail=True, url_path='actors', methods=['get'])
@@ -53,5 +56,24 @@ class SerieViewSet(viewsets.ModelViewSet):
     def serieAwards(self, request, pk=None):
         awards = self.get_object().awards.all()
         return Response(
-            AwardSerializer(award) for award in awards
+            AwardSerializer(award).data for award in awards
+        )
+
+    @action(detail=False, url_path='trending', methods=['get'])
+    def getTrending(self, request):
+        actual = Serie.objects.all()[::-1]
+        if (len(actual) >= 5):
+            return Response (
+                SerieSerializer(actual[i]).data for i in range(5)
+            )
+        else:
+            return Response(
+                SerieSerializer(serie).data for serie in actual
+            )
+
+    @action(detail=False, url_path='trendingall', methods=['get'])
+    def getTrendingall(self, request):
+        actual = Serie.objects.all()[::-1]
+        return Response(
+            SerieSerializer(serie).data for serie in actual
         )

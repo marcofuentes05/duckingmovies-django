@@ -13,7 +13,7 @@ class Serie(models.Model):
     # producer = models.ForeignKey(to = 'producers.producer', on_delete = models.CASCADE)
     seasons = models.IntegerField()
     classification = models.CharField(max_length = 10, null = False)
-    # comments = models.ManyToManyField('comments.comentairo') #TODO
+    comments = models.ManyToManyField('comments.SerieComment') #TODO
     awards = models.ManyToManyField(Award)
     def __str__(self):
         return 'Serie: {}'.format(self.name)

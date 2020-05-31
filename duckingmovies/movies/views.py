@@ -21,6 +21,7 @@ class MovieViewSet ( viewsets.ModelViewSet):
                 'base': {
                     'create': lambda user, request, third: user.is_staff,
                     'list': lambda user, request: user.is_authenticated,
+                    'getBanner' : True
                 },
                 'instance': {
                     'retrieve': True,
@@ -30,6 +31,9 @@ class MovieViewSet ( viewsets.ModelViewSet):
                     'movieDirector': lambda user, request, third: user.is_authenticated,
                     'movieActors': lambda user, request, third: user.is_authenticated,
                     'movieAwards': lambda user, request, third: user.is_authenticated,
+                    'getTrending' : True,
+                    'getTrendingall' : True
+
                 }
             }
         ),
@@ -54,4 +58,30 @@ class MovieViewSet ( viewsets.ModelViewSet):
         awards = self.get_object().award.all()
         return Response(
             AwardSerializer(award) for award in awards
+        )
+
+    @action(detail = False , url_path='banner' ,  methods = ['get'])
+    def getBanner(self , request ):
+        movie = Movie.objects.all()[::-1]
+        return Response(
+            MovieSerializer(movie[0]).data
+        )
+
+    @action (detail = False , url_path = 'trending' , methods = ['get'])
+    def getTrending ( self, request ): 
+        actual = Movie.objects.all()[::-1]
+        # actual = movies[::-1]
+        if len(actual) >= 5:
+            return Response(
+                MovieSerializer(actual[m]).data for m in range(5)
+            )
+        return Response(
+            MovieSerializer(actual[m]).data for m in range(len(actual))
+        )
+
+    @action(detail=False, url_path='trendingall', methods=['get'])
+    def getTrendingall(self, request):
+        actual = Movie.objects.all()[::-1]
+        return Response(
+            MovieSerializer(act).data for act in actual
         )

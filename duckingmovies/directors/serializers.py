@@ -4,6 +4,7 @@ from directors.models import Director
 from awards.serializers import AwardSerializer
 
 class DirectorSerializer(serializers.ModelSerializer):
+    awards = AwardSerializer
     class Meta: 
         model = Director
         fields = (

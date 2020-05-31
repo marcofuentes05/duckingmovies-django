@@ -1,8 +1,13 @@
 from rest_framework import serializers
 
 from series.models import Serie
-
+from actors.serializers import ActorSerializer
+from directors.serializers import DirectorSerializer
+from awards.serializers import AwardSerializer
 class SerieSerializer(serializers.ModelSerializer):
+    actors = ActorSerializer
+    director = DirectorSerializer
+    awards = AwardSerializer
     class Meta:
         model = Serie
         fields = (
