@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from videogames.models import Videogame
 from videogames.serializers import VideogameSerializer
 from permissions.services import APIPermissionClassFactory
-
+from comments.serializers import GameCommentSerializer
 # Create your views here.
 
 class VideogameViewSet(viewsets.ModelViewSet):
@@ -27,7 +27,8 @@ class VideogameViewSet(viewsets.ModelViewSet):
                     'partial_update': True,
                     'destroy': True,
                     'getTrending' : True,
-                    'getTrendingall' : True
+                    'getTrendingall' : True,
+                    'getComments' : True
                 }
             }
         ),
@@ -50,4 +51,11 @@ class VideogameViewSet(viewsets.ModelViewSet):
         actual = Videogame.objects.all()[::-1]
         return Response(
             VideogameSerializer(serie).data for serie in actual
+        )
+
+    @action(detail=True, url_path='comments', methods=['get'])
+    def getComments(self, request, pk=None):
+        comments = self.get_object().comments.all()
+        return Response(
+            GameCommentSerializer(comment).data for comment in comments
         )

@@ -11,6 +11,7 @@ from .serializers import SerieSerializer
 from actors.serializers import ActorSerializer
 from awards.serializers import AwardSerializer
 from directors.serializers import DirectorSerializer
+from comments.serializers import SerieCommentSerializer
 class SerieViewSet(viewsets.ModelViewSet):
     queryset = Serie.objects.all()
     serializer_class = SerieSerializer
@@ -31,7 +32,9 @@ class SerieViewSet(viewsets.ModelViewSet):
                     'serieActors': lambda user, request, third: user.is_authenticated,
                     'serieAwards': lambda user, request, third: user.is_authenticated,
                     'getTrending' : True,
-                    'getTrendingall' : True
+                    'getTrendingall' : True,
+                    'getComments' : True,
+                    'getComments' : True,
                 }
             }
         ),
@@ -76,4 +79,11 @@ class SerieViewSet(viewsets.ModelViewSet):
         actual = Serie.objects.all()[::-1]
         return Response(
             SerieSerializer(serie).data for serie in actual
+        )
+
+    @action(detail=True, url_path='comments', methods=['get'])
+    def getComments(self, request, pk=None):
+        comments = self.get_object().comments.all()
+        return Response(
+            SerieCommentSerializer(comment).data for comment in comments
         )

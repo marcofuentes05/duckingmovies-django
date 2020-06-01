@@ -10,7 +10,8 @@ from .models import Movie
 from .serializers import MovieSerializer
 from actors.serializers import ActorSerializer
 from awards.serializers import AwardSerializer
-
+from comments.models import MovieComment
+from comments.serializers import MovieCommentSerializer
 class MovieViewSet ( viewsets.ModelViewSet):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
@@ -32,7 +33,8 @@ class MovieViewSet ( viewsets.ModelViewSet):
                     'movieActors': lambda user, request, third: user.is_authenticated,
                     'movieAwards': lambda user, request, third: user.is_authenticated,
                     'getTrending' : True,
-                    'getTrendingall' : True
+                    'getTrendingall' : True,
+                    'getComments' : True
 
                 }
             }
@@ -84,4 +86,11 @@ class MovieViewSet ( viewsets.ModelViewSet):
         actual = Movie.objects.all()[::-1]
         return Response(
             MovieSerializer(act).data for act in actual
+        )
+
+    @action(detail = True , url_path = 'comments' , methods = ['get'])
+    def getComments(self, request , pk = None):
+        comments = self.get_object().comments.all()
+        return Response(
+            MovieCommentSerializer(comment).data for comment in comments
         )

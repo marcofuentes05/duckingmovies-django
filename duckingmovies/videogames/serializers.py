@@ -16,6 +16,7 @@ class VideogameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Videogame
         fields = (
+            'id',
             'title',
             'rating',
             'classification',

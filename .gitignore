@@ -247,3 +247,5 @@ GitHub.sublime-settings
 !.vscode/extensions.json 
 .history
 
+# Archivo de credenciales
+credentials.py
