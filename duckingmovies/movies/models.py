@@ -15,6 +15,7 @@ class Movie(models.Model):
     genres = models.ManyToManyField(
         'genres.Genre',
     )
+    imageUrl = models.TextField(null=True)
     
     # Movie(name = 'test movie',rating =  4.5 , budget = 90.0, duration = 90.5, classification = 'A')
     def __str__(self):

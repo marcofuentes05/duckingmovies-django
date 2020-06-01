@@ -22,4 +22,5 @@ class SerieSerializer(serializers.ModelSerializer):
             'classification',
             'awards',
             'genres',
+            'imageUrl',
         )

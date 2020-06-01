@@ -27,4 +27,5 @@ class MovieSerializer(serializers.ModelSerializer):
             'award',
             'comments',
             'genres',
+            'imageUrl',
         )

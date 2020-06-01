@@ -18,5 +18,6 @@ class Serie(models.Model):
     genres = models.ManyToManyField(
         'genres.Genre',
     )
+    imageUrl = models.TextField(null=True)
     def __str__(self):
         return 'Serie: {}'.format(self.name)

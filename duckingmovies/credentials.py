@@ -1,8 +1,8 @@
 DEVELOPMENT_DATABASE = {
     'NAME': 'duckingmovies',
-    'USER': 'marco',
-    'PASSWORD': '12345678',
+    'USER': 'administrador',
+    'PASSWORD': 'gamecube',
     'HOST': 'localhost',
-    'PORT': '5432',
+    'PORT': '5430',
     'CONNECTION': 'postgres',
 }

@@ -19,6 +19,7 @@ class Videogame(models.Model):
     consoles = models.ManyToManyField(
         'consoles.Console',
     )
+    imageUrl = models.TextField(null=True)
 
     def __str__(self):
         return self.title

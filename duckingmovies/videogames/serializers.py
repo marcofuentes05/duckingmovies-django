@@ -25,4 +25,5 @@ class VideogameSerializer(serializers.ModelSerializer):
             'genres',
             'comments',
             'consoles',
+            'imageUrl',
         )
