@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """ 
 import os
 import datetime
+import sys
+sys.path.insert(1, '../')
+import credentials
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -96,11 +99,11 @@ WSGI_APPLICATION = 'duckingmovies.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'duckingmovies',
-        'USER':'marco',
-        'PASSWORD':'12345678',
-        'HOST':'localhost',
-        'PORT' : '5432'
+        'NAME': credentials.DEVELOPMENT_DATABASE['NAME'],
+        'USER': credentials.DEVELOPMENT_DATABASE['USER'],
+        'PASSWORD': credentials.DEVELOPMENT_DATABASE['PASSWORD'],
+        'HOST': credentials.DEVELOPMENT_DATABASE['HOST'],
+        'PORT': credentials.DEVELOPMENT_DATABASE['PORT'],
     }
 }
 

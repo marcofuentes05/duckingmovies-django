@@ -12,6 +12,9 @@ class Movie(models.Model):
     classification = models.CharField(max_length = 10, null = False)
     award = models.ManyToManyField(Award)
     comments = models.ManyToManyField('comments.MovieComment') #TODO
+    genres = models.ManyToManyField(
+        'genres.Genre',
+    )
     
     # Movie(name = 'test movie',rating =  4.5 , budget = 90.0, duration = 90.5, classification = 'A')
     def __str__(self):

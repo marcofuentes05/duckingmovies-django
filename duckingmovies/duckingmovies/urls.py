@@ -32,6 +32,8 @@ from developers.views import DeveloperViewSet
 from movie_producers.views import MovieProducerViewSet
 from videogames.views import VideogameViewSet
 
+from init import create_initial_data
+
 
 router = routers.DefaultRouter()
 
@@ -57,4 +59,5 @@ urlpatterns = [
     url(r'^api/v1/', include(router.urls)),
     url(r'^api-token-auth/', obtain_jwt_token),
     url(r'^api-token-refresh/', refresh_jwt_token),
+    url(r'^admin/initial-data/', create_initial_data),
 ]

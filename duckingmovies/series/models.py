@@ -15,5 +15,8 @@ class Serie(models.Model):
     classification = models.CharField(max_length = 10, null = False)
     comments = models.ManyToManyField('comments.SerieComment') #TODO
     awards = models.ManyToManyField(Award)
+    genres = models.ManyToManyField(
+        'genres.Genre',
+    )
     def __str__(self):
         return 'Serie: {}'.format(self.name)

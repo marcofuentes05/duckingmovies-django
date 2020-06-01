@@ -45,7 +45,7 @@ class UserViewSet(viewsets.ModelViewSet):
         ),
     )
 
-    @action(detail=False, url_path = 'create_user', methods = ['post'])
+    @action(detail=False, url_path = 'create_user', methods = ['POST'])
     def newUser (self, request):
         print(request.data)
         print(request.data['username'])

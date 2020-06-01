@@ -5,12 +5,14 @@ from actors.serializers import ActorSerializer
 from directors.serializers import DirectorSerializer
 from awards.serializers import AwardSerializer
 from comments.serializers import MovieCommentSerializer
+from genres.serializers import GenreSerializer
 
 class MovieSerializer(serializers.ModelSerializer):
     actors = ActorSerializer
     director = DirectorSerializer
     award = AwardSerializer
     comments = MovieCommentSerializer
+    genres = GenreSerializer
     class Meta:
         model = Movie
         fields = (
@@ -23,5 +25,6 @@ class MovieSerializer(serializers.ModelSerializer):
             'duration',
             'classification',
             'award',
-            'comments'
+            'comments',
+            'genres',
         )
