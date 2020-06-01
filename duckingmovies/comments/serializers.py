@@ -10,6 +10,7 @@ class GameCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = GameComment
         fields = (
+            'id',
             'author',
             'text'
         )
@@ -19,6 +20,7 @@ class MovieCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = MovieComment
         fields = (
+            'id',
             'author',
             'text'
         )
@@ -28,6 +30,7 @@ class SerieCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = SerieComment
         fields = (
+            'id',
             'author',
             'text'
         )

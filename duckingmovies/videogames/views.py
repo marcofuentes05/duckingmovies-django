@@ -57,5 +57,5 @@ class VideogameViewSet(viewsets.ModelViewSet):
     def getComments(self, request, pk=None):
         comments = self.get_object().comments.all()
         return Response(
-            GameCommentSerializer(comment).data for comment in comments
+            {'id': GameCommentSerializer(comment).data['id'], 'comentario': GameCommentSerializer(comment).data['text'], 'username': comment.author.username} for comment in comments
         )

@@ -85,5 +85,5 @@ class SerieViewSet(viewsets.ModelViewSet):
     def getComments(self, request, pk=None):
         comments = self.get_object().comments.all()
         return Response(
-            SerieCommentSerializer(comment).data for comment in comments
+            {'id': SerieCommentSerializer(comment).data['id'], 'comentario': SerieCommentSerializer(comment).data['text'], 'username': comment.author.username} for comment in comments
         )

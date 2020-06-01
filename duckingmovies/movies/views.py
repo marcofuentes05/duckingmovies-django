@@ -92,5 +92,5 @@ class MovieViewSet ( viewsets.ModelViewSet):
     def getComments(self, request , pk = None):
         comments = self.get_object().comments.all()
         return Response(
-            MovieCommentSerializer(comment).data for comment in comments
+            { 'id' : MovieCommentSerializer(comment).data['id'] , 'comentario' : MovieCommentSerializer(comment).data['text'] , 'username' : comment.author.username}  for comment in comments
         )
