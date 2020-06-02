@@ -22,6 +22,7 @@ class SerieViewSet(viewsets.ModelViewSet):
                 'base': {
                     'create': lambda user, request: user.is_staff,
                     'list': lambda user, request: user.is_authenticated,
+                    'search': True,
                 },
                 'instance': {
                     'retrieve': True,
@@ -87,3 +88,18 @@ class SerieViewSet(viewsets.ModelViewSet):
         return Response(
             {'id': SerieCommentSerializer(comment).data['id'], 'comentario': SerieCommentSerializer(comment).data['text'], 'username': comment.author.username} for comment in comments
         )
+
+    @action(detail=False, url_path='search', methods=['GET'])
+    def search(self, request):
+        genero = request.META.get('HTTP_GENRE')
+        rate = float(request.META.get('HTTP_RATING'))
+        if(genero=='Ninguno'):
+            series = Serie.objects.all()
+            return Response(
+                SerieSerializer(serie).data for serie in series
+            )
+        else:
+            series = Serie.objects.filter(genres__name__contains=genero).filter(rating__lte=rate)
+            return  Response(
+                SerieSerializer(serie).data for serie in series
+            )

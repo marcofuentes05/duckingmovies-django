@@ -20,6 +20,7 @@ class VideogameViewSet(viewsets.ModelViewSet):
                 'base': {
                     'create': True,
                     'list': True,
+                    'search': True,
                 },
                 'instance': {
                     'retrieve': True,
@@ -59,3 +60,18 @@ class VideogameViewSet(viewsets.ModelViewSet):
         return Response(
             {'id': GameCommentSerializer(comment).data['id'], 'comentario': GameCommentSerializer(comment).data['text'], 'username': comment.author.username} for comment in comments
         )
+
+    @action(detail=False, url_path='search', methods=['GET'])
+    def search(self, request):
+        genero = request.META.get('HTTP_GENRE')
+        rate = float(request.META.get('HTTP_RATING'))
+        if(genero=='Ninguno'):
+            videogames = Videogame.objects.all()
+            return Response(
+                VideogameSerializer(videogame).data for videogame in videogames
+            )
+        else:
+            videogames = Videogame.objects.filter(genres__name__contains=genero).filter(rating__lte=rate)
+            return  Response(
+                VideogameSerializer(videogame).data for videogame in videogames
+            )

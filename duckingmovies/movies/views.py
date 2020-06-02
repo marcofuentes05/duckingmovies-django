@@ -22,7 +22,8 @@ class MovieViewSet ( viewsets.ModelViewSet):
                 'base': {
                     'create': lambda user, request, third: user.is_staff,
                     'list': lambda user, request: user.is_authenticated,
-                    'getBanner' : True
+                    'getBanner' : True,
+                    'search': True,
                 },
                 'instance': {
                     'retrieve': True,
@@ -94,3 +95,20 @@ class MovieViewSet ( viewsets.ModelViewSet):
         return Response(
             { 'id' : MovieCommentSerializer(comment).data['id'] , 'comentario' : MovieCommentSerializer(comment).data['text'] , 'username' : comment.author.username}  for comment in comments
         )
+
+    @action(detail=False, url_path='search', methods=['GET'])
+    def search(self, request):
+        genero = request.META.get('HTTP_GENRE')
+        rate = float(request.META.get('HTTP_RATING'))
+        print(rate)
+        print(genero)
+        if(genero=='Ninguno'):
+            movies = Movie.objects.all()
+            return Response(
+                MovieSerializer(movie).data for movie in movies
+            )
+        else:
+            movies = Movie.objects.filter(genres__name__contains=genero).filter(rating__lte=rate)
+            return  Response(
+                MovieSerializer(movie).data for movie in movies
+            )
