@@ -32,8 +32,8 @@ class MovieViewSet ( viewsets.ModelViewSet):
                     'partial_update': True,
                     'destroy': True,
                     'movieDirector': lambda user, request, third: user.is_authenticated,
-                    'movieActors': lambda user, request, third: user.is_authenticated,
-                    'movieAwards': lambda user, request, third: user.is_authenticated,
+                    'movieActors': True,
+                    'movieAwards': True,
                     'getTrendingall' : True,
                     'getComments' : True,
 
@@ -60,7 +60,7 @@ class MovieViewSet ( viewsets.ModelViewSet):
     def movieAwards(self, request, pk = None):
         awards = self.get_object().award.all()
         return Response(
-            AwardSerializer(award) for award in awards
+            AwardSerializer(award).data for award in awards
         )
 
     @action(detail = False , url_path='banner' ,  methods = ['get'])
