@@ -20,7 +20,7 @@ class VideogameViewSet(viewsets.ModelViewSet):
                 'base': {
                     'create': True,
                     'list': True,
-                    'search': True,
+                    'search': lambda user, request: user.is_authenticated,
                 },
                 'instance': {
                     'retrieve': True,
@@ -66,7 +66,7 @@ class VideogameViewSet(viewsets.ModelViewSet):
         genero = request.META.get('HTTP_GENRE')
         rate = float(request.META.get('HTTP_RATING'))
         if(genero=='Ninguno'):
-            videogames = Videogame.objects.all()
+            videogames = Videogame.objects.filter(rating__lte=rate)
             return Response(
                 VideogameSerializer(videogame).data for videogame in videogames
             )

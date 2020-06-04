@@ -23,19 +23,19 @@ class MovieViewSet ( viewsets.ModelViewSet):
                     'create': lambda user, request, third: user.is_staff,
                     'list': lambda user, request: user.is_authenticated,
                     'getBanner' : True,
-                    'search': True,
+                    'search': lambda user, request: user.is_authenticated,
                 },
                 'instance': {
                     'retrieve': True,
                     'update': True,
+                    'getTrending' : lambda user, request: user.is_authenticated,
                     'partial_update': True,
                     'destroy': True,
                     'movieDirector': lambda user, request, third: user.is_authenticated,
                     'movieActors': lambda user, request, third: user.is_authenticated,
                     'movieAwards': lambda user, request, third: user.is_authenticated,
-                    'getTrending' : True,
                     'getTrendingall' : True,
-                    'getComments' : True
+                    'getComments' : True,
 
                 }
             }
@@ -103,7 +103,7 @@ class MovieViewSet ( viewsets.ModelViewSet):
         print(rate)
         print(genero)
         if(genero=='Ninguno'):
-            movies = Movie.objects.all()
+            movies = Movie.objects.filter(rating__lte=rate)
             return Response(
                 MovieSerializer(movie).data for movie in movies
             )

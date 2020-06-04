@@ -8,4 +8,4 @@ class Award(models.Model):
     year = models.IntegerField()
     
     def __str__(self):
-        return str(self.name) + ' in ' + str(self.year)
+        return str(self.category) + ' in ' + str(self.year)

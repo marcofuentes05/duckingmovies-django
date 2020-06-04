@@ -22,17 +22,17 @@ class SerieViewSet(viewsets.ModelViewSet):
                 'base': {
                     'create': lambda user, request: user.is_staff,
                     'list': lambda user, request: user.is_authenticated,
-                    'search': True,
+                    'search': lambda user, request: user.is_authenticated,
                 },
                 'instance': {
                     'retrieve': True,
                     'update': lambda user, request, third: user.is_staff,
+                    'getTrending' : lambda user, request: user.is_authenticated,
                     'partial_update': True,
                     'destroy': lambda user, request, third: user.is_staff,
                     'serieDirector': lambda user, request, third: user.is_authenticated,
                     'serieActors': lambda user, request, third: user.is_authenticated,
                     'serieAwards': lambda user, request, third: user.is_authenticated,
-                    'getTrending' : True,
                     'getTrendingall' : True,
                     'getComments' : True,
                     'getComments' : True,
@@ -94,7 +94,7 @@ class SerieViewSet(viewsets.ModelViewSet):
         genero = request.META.get('HTTP_GENRE')
         rate = float(request.META.get('HTTP_RATING'))
         if(genero=='Ninguno'):
-            series = Serie.objects.all()
+            series = Serie.objects.filter(rating__lte=rate)
             return Response(
                 SerieSerializer(serie).data for serie in series
             )
