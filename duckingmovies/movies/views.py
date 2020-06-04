@@ -5,13 +5,17 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from permissions.services import APIPermissionClassFactory
-
+import random
 from .models import Movie
 from .serializers import MovieSerializer
+from series.models import Serie
+from videogames.models import Videogame
 from actors.serializers import ActorSerializer
 from awards.serializers import AwardSerializer
+from directors.serializers import DirectorSerializer
 from comments.models import MovieComment
 from comments.serializers import MovieCommentSerializer
+from django.contrib.auth.models import User
 class MovieViewSet ( viewsets.ModelViewSet):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
@@ -21,9 +25,10 @@ class MovieViewSet ( viewsets.ModelViewSet):
             permission_configuration={
                 'base': {
                     'create': lambda user, request, third: user.is_staff,
-                    'list': lambda user, request: user.is_authenticated,
+                    'list': lambda user , request : user.is_authenticated,
                     'getBanner' : True,
                     'search': lambda user, request: user.is_authenticated,
+                    'getBanner' : True
                 },
                 'instance': {
                     'retrieve': True,
@@ -31,12 +36,13 @@ class MovieViewSet ( viewsets.ModelViewSet):
                     'getTrending' : lambda user, request: user.is_authenticated,
                     'partial_update': True,
                     'destroy': True,
-                    'movieDirector': lambda user, request, third: user.is_authenticated,
-                    'movieActors': True,
-                    'movieAwards': True,
-                    'getTrendingall' : True,
-                    'getComments' : True,
-
+                    'movieDirector': True , #lambda user, request, third: user.is_authenticated,
+                    'movieActors': True , #lambda user, request, third: user.is_authenticated,
+                    'movieAwards': True , #lambda user, request, third: user.is_authenticated,
+                    'getTrending': lambda user, request, third: user.is_authenticated,
+                    'getTrendingall': lambda user, request, third: user.is_authenticated,
+                    'getComments': True, #lambda user , request, third: user.is_authenticated,
+                    'comment': lambda user, request, third: user.is_authenticated,
                 }
             }
         ),
@@ -45,9 +51,9 @@ class MovieViewSet ( viewsets.ModelViewSet):
     @action(detail = True, url_path = 'director', methods = ['get'])
     def movieDirector(self, request, pk = None):
         director = self.get_object().director
-        return Response({
-            str(director)
-        })
+        return Response(
+            DirectorSerializer(director).data
+        )
 
     @action(detail = True, url_path = 'actors', methods = ['get'])
     def movieActors(self, request, pk = None):
@@ -93,7 +99,7 @@ class MovieViewSet ( viewsets.ModelViewSet):
     def getComments(self, request , pk = None):
         comments = self.get_object().comments.all()
         return Response(
-            { 'id' : MovieCommentSerializer(comment).data['id'] , 'comentario' : MovieCommentSerializer(comment).data['text'] , 'username' : comment.author.username}  for comment in comments
+            MovieCommentSerializer(comment).data for comment in comments
         )
 
     @action(detail=False, url_path='search', methods=['GET'])
@@ -111,4 +117,28 @@ class MovieViewSet ( viewsets.ModelViewSet):
             movies = Movie.objects.filter(genres__name__contains=genero).filter(rating__lte=rate)
             return  Response(
                 MovieSerializer(movie).data for movie in movies
+            )
+    
+    @action (detail = True , url_path = 'comment' , methods= ['post'])
+    def comment(self, request , pk = None):
+        user = User.objects.get(id=request.data['author'])
+        comment = MovieComment( author = user , text = request.data['text'])
+        comment.save()
+        self.get_object().comments.add(comment)
+        self.get_object().save()
+        return Response({
+            'id': comment.id,
+            'text': comment.text,
+            'author': comment.author.id
+        })
+
+    @action (detail = False , url_path = 'banner' , methods = ['get'])
+    def getBanner(self, request):
+        numMovies = len(Movie.objects.all())
+        m0 = Movie.objects.get(id = random.randint(1,numMovies))
+        m1 = Movie.objects.get(id=random.randint(1, numMovies))
+        m2 = Movie.objects.get(id=random.randint(1, numMovies))
+        if numMovies > 3:
+            return Response(
+                [MovieSerializer(m0).data, MovieSerializer(m1).data, MovieSerializer(m2).data]
             )

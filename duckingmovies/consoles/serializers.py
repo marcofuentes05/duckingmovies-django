@@ -7,6 +7,7 @@ class ConsoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Console
         fields = (
+            'id',
             'name',
             'brand',
             'release_date'

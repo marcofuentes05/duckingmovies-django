@@ -8,6 +8,13 @@ from videogames.models import Videogame
 from videogames.serializers import VideogameSerializer
 from permissions.services import APIPermissionClassFactory
 from comments.serializers import GameCommentSerializer
+from django.contrib.auth.models import User
+from comments.models import GameComment
+from django.contrib.auth.models import User
+from developers.models import Developer
+from consoles.models import Console
+from consoles.serializers import ConsoleSerializer
+from developers.serializers import DeveloperSerializer
 # Create your views here.
 
 class VideogameViewSet(viewsets.ModelViewSet):
@@ -27,13 +34,23 @@ class VideogameViewSet(viewsets.ModelViewSet):
                     'update': True,
                     'partial_update': True,
                     'destroy': True,
-                    'getTrending' : True,
+                    'getTrending' : lambda user, request , third : user.is_authenticated,
                     'getTrendingall' : True,
-                    'getComments' : True
+                    'getComments': True ,#lambda user, request, third: user.is_authenticated,  # True,
+                    'comment': True,
+                    'getConsoles' : True,
+                    'getDev' : True,
                 }
             }
         ),
     )
+
+    @action(detail = True , url_path = 'consoles' , methods = ['get'])
+    def getConsoles(self , request , pk = None) :
+        consolas = self.get_object().consoles.all()
+        return Response(
+            ConsoleSerializer(consola).data for consola in consolas
+        )
 
     @action(detail=False, url_path='trending', methods=['get'])
     def getTrending(self, request):
@@ -58,7 +75,7 @@ class VideogameViewSet(viewsets.ModelViewSet):
     def getComments(self, request, pk=None):
         comments = self.get_object().comments.all()
         return Response(
-            {'id': GameCommentSerializer(comment).data['id'], 'comentario': GameCommentSerializer(comment).data['text'], 'username': comment.author.username} for comment in comments
+            GameCommentSerializer(comment).data for comment in comments
         )
 
     @action(detail=False, url_path='search', methods=['GET'])
@@ -75,3 +92,23 @@ class VideogameViewSet(viewsets.ModelViewSet):
             return  Response(
                 VideogameSerializer(videogame).data for videogame in videogames
             )
+
+    @action(detail=True, url_path='comment', methods=['post'])
+    def comment(self, request, pk=None):
+        user = User.objects.get(id=request.data['author'])
+        comment = GameComment(author=user, text=request.data['text'])
+        comment.save()
+        self.get_object().comments.add(comment)
+        self.get_object().save()
+        return Response({
+            'id': comment.id,
+            'text': comment.text,
+            'author': comment.author.id
+        })
+
+    @action(detail = True , url_path = 'developer' , methods = ['get'])
+    def getDev( self, request , pk = None ):
+        dev = self.get_object().developer
+        return Response(
+            DeveloperSerializer(dev).data
+        )

@@ -12,6 +12,12 @@ from actors.serializers import ActorSerializer
 from awards.serializers import AwardSerializer
 from directors.serializers import DirectorSerializer
 from comments.serializers import SerieCommentSerializer
+from django.contrib.auth.models import User
+from comments.models import SerieComment
+
+def isAuth(user, request , algo = None):
+    return user.is_authenticated
+
 class SerieViewSet(viewsets.ModelViewSet):
     queryset = Serie.objects.all()
     serializer_class = SerieSerializer
@@ -23,19 +29,23 @@ class SerieViewSet(viewsets.ModelViewSet):
                     'create': lambda user, request: user.is_staff,
                     'list': lambda user, request: user.is_authenticated,
                     'search': lambda user, request: user.is_authenticated,
+                    'getTrendingall': True,
+                    
                 },
                 'instance': {
+                    'getTrending': lambda user, request , third : user.is_authenticated,
                     'retrieve': True,
                     'update': lambda user, request, third: user.is_staff,
                     'getTrending' : lambda user, request: user.is_authenticated,
                     'partial_update': True,
                     'destroy': lambda user, request, third: user.is_staff,
-                    'serieDirector': lambda user, request, third: user.is_authenticated,
+                    'serieDirector': True , #lambda user, request, third: user.is_authenticated,
                     'serieActors': True,
                     'serieAwards': True,
                     'getTrendingall' : True,
                     'getComments' : True,
                     'getComments' : True,
+                    'comment' : True,
                 }
             }
         ),
@@ -85,8 +95,9 @@ class SerieViewSet(viewsets.ModelViewSet):
     @action(detail=True, url_path='comments', methods=['get'])
     def getComments(self, request, pk=None):
         comments = self.get_object().comments.all()
+        print('n\n\n', [SerieCommentSerializer(comment).data for comment in comments])
         return Response(
-            {'id': SerieCommentSerializer(comment).data['id'], 'comentario': SerieCommentSerializer(comment).data['text'], 'username': comment.author.username} for comment in comments
+            SerieCommentSerializer(comment).data for comment in comments
         )
 
     @action(detail=False, url_path='search', methods=['GET'])
@@ -103,3 +114,16 @@ class SerieViewSet(viewsets.ModelViewSet):
             return  Response(
                 SerieSerializer(serie).data for serie in series
             )
+
+    @action(detail=True, url_path='comment', methods=['post'])
+    def comment(self, request, pk=None):
+        user = User.objects.get(id=request.data['author'])
+        comment = SerieComment(author=user, text=request.data['text'])
+        comment.save()
+        self.get_object().comments.add(comment)
+        self.get_object().save()
+        return Response({
+            'id' : comment.id,
+            'text' : comment.text,
+            'author' : comment.author.id
+        })
