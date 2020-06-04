@@ -66,6 +66,8 @@ admin/initial-data/
 #Ejemplo
 http://127.0.0.1:8000/admin/initial-data/
 ```
+Pegar el resultado en el navegador de preferencia y presionar ENTER.
+
 Si sale de mensaje: **{"Status": "Ok", "Data": "Data imported"}**
 Ya hay data en la bd
 
