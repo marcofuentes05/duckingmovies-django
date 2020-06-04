@@ -19,3 +19,56 @@ souce venv/bin/activate
 # Instalar todas las dependencias con un solo comando
 pip3 install -r requirements.txt
 ```
+
+# CARGAR DATOS A LA BD
+
+Poner credenciales en archivo **credentials.py**
+
+```bash
+#ejemplo
+DEVELOPMENT_DATABASE = {
+    'NAME': 'duckingmovies',
+    'USER': 'your user',
+    'PASSWORD': 'your password',
+    'HOST': 'localhost',
+    'PORT': '5432',
+    'CONNECTION': 'postgres',
+}
+```
+Correr el archivo **load_data.py**:
+
+```bash
+#Seleccionar opcion 1
+Create or Reset DB
+
+#Seleccionar opcion 3
+Migrations
+
+#Seleccionar opcion 4
+Exit
+```
+
+Iniciar server de django:
+
+```bash
+python manage.py runserver
+```
+
+Copiar el link en donde está corriendo el servidor en el navegador
+```bash
+#Normalmente es
+http://127.0.0.1:8000/
+```
+ y agregarle
+```bash
+admin/initial-data/
+
+#Ejemplo
+http://127.0.0.1:8000/admin/initial-data/
+```
+Pegar el resultado en el navegador de preferencia y presionar ENTER.
+
+Si sale de mensaje: **{"Status": "Ok", "Data": "Data imported"}**
+Ya hay data en la bd
+
+
