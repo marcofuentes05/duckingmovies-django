@@ -106,8 +106,6 @@ class MovieViewSet ( viewsets.ModelViewSet):
     def search(self, request):
         genero = request.META.get('HTTP_GENRE')
         rate = float(request.META.get('HTTP_RATING'))
-        print(rate)
-        print(genero)
         if(genero=='Ninguno'):
             movies = Movie.objects.filter(rating__lte=rate)
             return Response(

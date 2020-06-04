@@ -47,8 +47,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, url_path = 'create_user', methods = ['POST'])
     def newUser (self, request):
-        print(request.data)
-        print(request.data['username'])
         usuario = User(
             username=request.data['username'], 
             first_name=request.data['firstName'],
@@ -65,8 +63,6 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail = True, url_path = 'upgrade_user', methods = ['post'])
     def upgrade(self, request, pk = None):
         user = User.objects.get(id = pk)
-        print(str(user.username))
-        print(str(user.password))
         user.is_staff = True
         user.save()
         return Response({
@@ -76,7 +72,6 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail = True , url_path = 'commented_movies' , methods = ['get'])
     def cmovies( self , request , pk = None ):
         movies = Movie.objects.filter(comments__author__id = pk)
-        print(str(movies))
         return Response(
             MovieSerializer(movie).data for movie in movies
         )

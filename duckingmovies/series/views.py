@@ -95,7 +95,6 @@ class SerieViewSet(viewsets.ModelViewSet):
     @action(detail=True, url_path='comments', methods=['get'])
     def getComments(self, request, pk=None):
         comments = self.get_object().comments.all()
-        print('n\n\n', [SerieCommentSerializer(comment).data for comment in comments])
         return Response(
             SerieCommentSerializer(comment).data for comment in comments
         )
