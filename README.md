@@ -28,10 +28,10 @@ Poner credenciales en archivo **credentials.py**
 #ejemplo
 DEVELOPMENT_DATABASE = {
     'NAME': 'duckingmovies',
-    'USER': 'administrador',
-    'PASSWORD': 'gamecube',
+    'USER': 'your user',
+    'PASSWORD': 'your password',
     'HOST': 'localhost',
-    'PORT': '5430',
+    'PORT': '5432',
     'CONNECTION': 'postgres',
 }
 ```
