@@ -4,6 +4,8 @@
 
 <h4 align = 'center'> Desarrollado por Andy Castillo y Marco Fuentes </h4>
 
+## Video de demo [en este link](https://youtu.be/1c_gpvv3wx8)
+
 # MONTAR ENTORNO VIRTUAL
 
 ```bash
